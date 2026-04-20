@@ -8,7 +8,15 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
-import { Globe, Hand } from "lucide-react"
+import {
+  Globe,
+  Hand,
+  FileText,
+  CreditCard,
+  Bot,
+  Sparkles,
+  MessageSquare,
+} from "lucide-react"
 import { useReactFlow } from "@xyflow/react"
 import { createId } from "@paralleldrive/cuid2"
 
@@ -26,11 +34,60 @@ const availableNodes = [
     category: "Triggers",
   },
   {
+    type: "google_form_trigger",
+    label: "Google Form Trigger",
+    description: "Trigger on form submission",
+    icon: FileText,
+    category: "Triggers",
+  },
+  {
+    type: "stripe_trigger",
+    label: "Stripe Trigger",
+    description: "Trigger on Stripe event",
+    icon: CreditCard,
+    category: "Triggers",
+  },
+  {
     type: "http_request",
     label: "HTTP Request",
     description: "Make an HTTP API request",
     icon: Globe,
     category: "Actions",
+  },
+  {
+    type: "gemini_ai",
+    label: "Gemini AI",
+    description: "Generate text with Google Gemini",
+    icon: Sparkles,
+    category: "AI",
+  },
+  {
+    type: "anthropic_ai",
+    label: "Anthropic AI",
+    description: "Generate text with Claude",
+    icon: Bot,
+    category: "AI",
+  },
+  {
+    type: "open_ai",
+    label: "OpenAI",
+    description: "Generate text with GPT",
+    icon: Bot,
+    category: "AI",
+  },
+  {
+    type: "discord",
+    label: "Discord",
+    description: "Send a Discord message",
+    icon: MessageSquare,
+    category: "Integrations",
+  },
+  {
+    type: "slack",
+    label: "Slack",
+    description: "Send a Slack message",
+    icon: MessageSquare,
+    category: "Integrations",
   },
 ]
 
