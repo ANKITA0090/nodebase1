@@ -7,7 +7,8 @@ import prisma from "@/lib/database"
 import { generateSlug } from "random-word-slugs"
 import { TRPCError } from "@trpc/server"
 import { pagination } from "@/config/constants"
-import type { PrismaClient } from "@/generated/prisma"
+import type { PrismaClient, NodeType } from "@/generated/prisma"
+import { inngest } from "@/inngest/client"
 
 type PrismaTransactionClient = Omit<PrismaClient, "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends">
 
@@ -112,7 +113,7 @@ export const workflowsRouter = createTRPCRouter({
               data: {
                 id: node.id,
                 workflowId: input.id,
-                type: node.type as "initial" | "manual_trigger" | "http_request",
+                type: node.type as NodeType,
                 position: node.position as object,
                 data: node.data as object,
               },
@@ -157,6 +158,19 @@ export const workflowsRouter = createTRPCRouter({
         throw new TRPCError({ code: "FORBIDDEN", message: "Access denied" })
       }
       return workflow
+    }),
+
+  execute: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const workflow = await prisma.workflow.findUnique({ where: { id: input.id } })
+      if (!workflow) throw new TRPCError({ code: "NOT_FOUND", message: "Workflow not found" })
+      if (workflow.userId !== ctx.auth.user.id) throw new TRPCError({ code: "FORBIDDEN", message: "Access denied" })
+      const result = await inngest.send({
+        name: "workflow/execute",
+        data: { workflowId: input.id, userId: ctx.auth.user.id },
+      })
+      return { eventId: result.ids[0] }
     }),
 
   getMany: protectedProcedure

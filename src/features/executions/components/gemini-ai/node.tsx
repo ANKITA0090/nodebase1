@@ -2,23 +2,22 @@
 
 import { BaseExecutionNode } from "@/features/executions/components/base-execution-node"
 import { type NodeProps } from "@xyflow/react"
-import { Globe } from "lucide-react"
+import { Sparkles } from "lucide-react"
 import { useState } from "react"
-import { HttpRequestDialogue } from "./dialogue"
+import { GeminiAiDialogue } from "./dialogue"
 import { Button } from "@/components/ui/button"
 
-export function HttpRequestNode({ selected, data, id }: NodeProps) {
+export function GeminiAiNode({ selected, data, id }: NodeProps) {
   const [open, setOpen] = useState(false)
-  const method = (data?.method as string) || "GET"
-  const url = (data?.url as string) || ""
+  const variableName = (data?.variableName as string) || ""
 
   return (
     <>
       <BaseExecutionNode
         selected={selected}
-        icon={<Globe className="h-4 w-4" />}
-        label="HTTP Request"
-        description={url ? `${method} ${url}` : "Configure HTTP request"}
+        icon={<Sparkles className="h-4 w-4" />}
+        label="Gemini AI"
+        description={variableName ? `Output: ${variableName}` : "Configure Gemini AI"}
       >
         <Button
           size="sm"
@@ -29,7 +28,7 @@ export function HttpRequestNode({ selected, data, id }: NodeProps) {
           Configure
         </Button>
       </BaseExecutionNode>
-      <HttpRequestDialogue open={open} onOpenChange={setOpen} data={data} nodeId={id} />
+      <GeminiAiDialogue open={open} onOpenChange={setOpen} data={data} nodeId={id} />
     </>
   )
 }

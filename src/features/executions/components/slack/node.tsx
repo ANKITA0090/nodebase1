@@ -2,23 +2,21 @@
 
 import { BaseExecutionNode } from "@/features/executions/components/base-execution-node"
 import { type NodeProps } from "@xyflow/react"
-import { Globe } from "lucide-react"
+import { MessageSquare } from "lucide-react"
 import { useState } from "react"
-import { HttpRequestDialogue } from "./dialogue"
+import { SlackDialogue } from "./dialogue"
 import { Button } from "@/components/ui/button"
 
-export function HttpRequestNode({ selected, data, id }: NodeProps) {
+export function SlackNode({ selected, data, id }: NodeProps) {
   const [open, setOpen] = useState(false)
-  const method = (data?.method as string) || "GET"
-  const url = (data?.url as string) || ""
 
   return (
     <>
       <BaseExecutionNode
         selected={selected}
-        icon={<Globe className="h-4 w-4" />}
-        label="HTTP Request"
-        description={url ? `${method} ${url}` : "Configure HTTP request"}
+        icon={<MessageSquare className="h-4 w-4" />}
+        label="Slack"
+        description="Send Slack message"
       >
         <Button
           size="sm"
@@ -29,7 +27,7 @@ export function HttpRequestNode({ selected, data, id }: NodeProps) {
           Configure
         </Button>
       </BaseExecutionNode>
-      <HttpRequestDialogue open={open} onOpenChange={setOpen} data={data} nodeId={id} />
+      <SlackDialogue open={open} onOpenChange={setOpen} data={data} nodeId={id} />
     </>
   )
 }

@@ -94,3 +94,18 @@ export function useWorkflow(id: string) {
   const trpc = useTRPC()
   return useSuspenseQuery(trpc.workflows.getOne.queryOptions({ id }))
 }
+
+export function useExecuteWorkflow() {
+  const trpc = useTRPC()
+
+  return useMutation(
+    trpc.workflows.execute.mutationOptions({
+      onSuccess: () => {
+        toast.success("Workflow execution started")
+      },
+      onError: (error) => {
+        toast.error(error.message || "Failed to execute workflow")
+      },
+    })
+  )
+}
